@@ -1,0 +1,8 @@
+.env
+.vscode
+.fun
+.Funfile.generated.dockerfile
+Funfile
+template.yml
+.template.yml.backup
+model

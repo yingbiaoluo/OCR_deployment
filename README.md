@@ -1,2 +1,3 @@
 # OCR_deployment
-self-innovated OCR algorithms deployed in Function Compute of Aliyun Cloud
+
+[函数计算部署步骤](./docs/FunctionComputeDepoloyment.md)

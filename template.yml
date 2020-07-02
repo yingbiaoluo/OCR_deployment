@@ -1,0 +1,40 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+    OCR_test: # service name
+      Type: 'Aliyun::Serverless::Service'
+      Properties:
+        Description: 'This is FC service'
+        # NasConfig: Auto
+        VpcConfig:
+          VpcId: "vpc-uf6yhjazdxpek2is0u24q"
+          VSwitchIds: ["vsw-uf60usfjbyzl9w7bx9hth"]
+          SecurityGroupId: "sg-uf6hdb9gj0vmicsdjlfa"
+        NasConfig:
+          UserId: 10003
+          GroupId: 10003
+          MountPoints:
+            - ServerAddr: "3992a48d42-iwo76.cn-shanghai.nas.aliyuncs.com:/OCR_test"
+              MountDir: '/mnt/nas_ocr'
+      ocr_recognition: # function name
+        Type: 'Aliyun::Serverless::Function'
+        Properties:
+          Handler: det_reg.handler
+          Runtime: python3
+          CodeUri: ./
+          EnvironmentVariables:
+            model_path: /mnt/nas_ocr/model
+          MemorySize: 3072
+          Timeout: 15
+
+    OCRGroup: # Api Group
+      Type: 'Aliyun::Serverless::Api'
+      Properties:
+        StageName: RELEASE
+        DefinitionBody:
+          '/': # request path
+            get: # http method
+              x-aliyun-apigateway-api-name: ocr_get
+              x-aliyun-apigateway-fc:
+                arn: acs:fc:::services/${OCR_test.Arn}/functions/${ocr_recognition.Arn}/
+                timeout: 15

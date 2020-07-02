@@ -1,0 +1,6 @@
+RUNTIME python3
+RUN fun-install pip install torch -t /mnt/nas_ocr
+RUN fun-install pip install torchvision -t /mnt/nas_ocr
+RUN fun-install pip install PyYAML -t /mnt/nas_ocr
+RUN fun-install pip install easydict -t /mnt/nas_ocr
+COPY ./model /mnt/nas_ocr/model
