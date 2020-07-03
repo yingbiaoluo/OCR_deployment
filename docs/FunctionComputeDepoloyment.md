@@ -40,9 +40,15 @@ Fun 是一个用于支持 Serverless 应用部署的工具，能便捷地管理�
 
 将第三方库下载到本地的.fun文件夹下：
 
-```shell
+```bash
 fun install -v
 ```
+
+![fun install](./../images/fun_install.png)
+
+使用```docker images```查看安装的Docker镜像文件：
+
+![docker images](./../images/docker_images.png)
 
 根据 Funfile 的定义：
 
@@ -52,6 +58,52 @@ fun install -v
 安装完成后,函数计算引用的代码包解压之后远超过 50M 代码包限制，解决方案是挂载 NAS 访问，幸运的是 fun 工具一键解决了 NAS 的配置和文件上传问题。
 
 ### 2.3 本地调试
+
+fun local invoke在本地执行函数：
+
+```bash
+fun local invoke OCR_test/ocr_recognition
+```
+
+![fun local invoke](./../images/fun_local_invoke.png)
+
+### 2.4 将第三方依赖上传到NAS
+
+```bash
+fun nas init
+fun nas info
+fun nas sync
+fun nas ls nas:///mnt/nas_ocr
+```
+
+依次执行这些命令，就将本地中的 .fun/nas 中的第三方代码包和模型文件传到 NAS 中, 依次看下这几个命令的做了什么事情:
+
+* fun nas init: 初始化 NAS, 基于 .env 中的信息获取(已有满足条件的NAS)或创建一个同region可用的NAS
+* fun nas info: 可以查看本地 NAS 的目录位置
+* fun nas sync: 将本地 NAS 中的内容上传到 NAS 中的 nas_ocr 目录
+* fun nas ls nas:///mnt/nas_ocr: 查看我们是否已经正确将文件上传到了 NAS
+
+![fun nas ls](./../images/fun_nas_ls.png)
+
+### 2.5 部署至函数计算平台
+
+将代码部分部署函数计算平台：
+
+```bash
+fun deploy
+```
+
+![fun deploy](./../images/fun_deploy.png)
+
+在云端执行函数：
+
+```bash
+fun invoke
+```
+
+![fun invoke](./../images/fun_invoke.png)
+
+至此，函数计算部署完成，但是API网关及其调试尚未完善。
 
 ### 参考链接🔗
 
