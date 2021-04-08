@@ -1,0 +1,40 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  OCR_test:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: This is FC service
+      Role: >-
+        acs:ram::1578970253760322:role/aliyunfcgeneratedrole-cn-shanghai-ocr-test
+      VpcConfig:
+        VpcId: vpc-uf6yhjazdxpek2is0u24q
+        VSwitchIds:
+          - vsw-uf60usfjbyzl9w7bx9hth
+        SecurityGroupId: sg-uf6hdb9gj0vmicsdjlfa
+      NasConfig:
+        UserId: 10003
+        GroupId: 10003
+        MountPoints:
+          - ServerAddr: '3992a48d42-iwo76.cn-shanghai.nas.aliyuncs.com:/OCR_test'
+            MountDir: /mnt/nas_ocr
+      InternetAccess: true
+    ocr_recognition:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: det_reg.handler
+        Runtime: python3
+        Timeout: 15
+        MemorySize: 3072
+        InstanceConcurrency: 1
+        EnvironmentVariables:
+          LD_LIBRARY_PATH: >-
+            /code/.fun/root/usr/local/lib:/code/.fun/root/usr/lib:/code/.fun/root/usr/lib/x86_64-linux-gnu:/code/.fun/root/usr/lib64:/code/.fun/root/lib:/code/.fun/root/lib/x86_64-linux-gnu:/code/.fun/root/python/lib/python2.7/site-packages:/code/.fun/root/python/lib/python3.6/site-packages:/code:/code/lib:/usr/local/lib:/mnt/nas_ocr/root/usr/local/lib:/mnt/nas_ocr/root/usr/lib:/mnt/nas_ocr/root/usr/lib/x86_64-linux-gnu:/mnt/nas_ocr/root/usr/lib64:/mnt/nas_ocr/root/lib:/mnt/nas_ocr/root/lib/x86_64-linux-gnu:/mnt/nas_ocr/root/python/lib/python2.7/site-packages:/mnt/nas_ocr/root/python/lib/python3.6/site-packages
+          NODE_PATH: >-
+            /code/node_modules:/usr/local/lib/node_modules:/mnt/nas_ocr/node_modules
+          PATH: >-
+            /code/.fun/root/usr/local/bin:/code/.fun/root/usr/local/sbin:/code/.fun/root/usr/bin:/code/.fun/root/usr/sbin:/code/.fun/root/sbin:/code/.fun/root/bin:/code:/code/node_modules/.bin:/code/.fun/python/bin:/code/.fun/node_modules/.bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/sbin:/bin:/mnt/nas_ocr/root/usr/local/bin:/mnt/nas_ocr/root/usr/local/sbin:/mnt/nas_ocr/root/usr/bin:/mnt/nas_ocr/root/usr/sbin:/mnt/nas_ocr/root/sbin:/mnt/nas_ocr/root/bin:/mnt/nas_ocr/python/bin:/mnt/nas_ocr/node_modules/.bin
+          PYTHONPATH: >-
+            /mnt/nas_ocr/python/lib/python2.7/site-packages:/mnt/nas_ocr/python/lib/python3.6/site-packages
+          PYTHONUSERBASE: /code/.fun/python
+          model_path: /mnt/nas_ocr/model

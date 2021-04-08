@@ -37,4 +37,4 @@ Resources:
               x-aliyun-apigateway-api-name: ocr_get
               x-aliyun-apigateway-fc:
                 arn: acs:fc:::services/${OCR_test.Arn}/functions/${ocr_recognition.Arn}/
-                timeout: 15
+                timeout: 2000
